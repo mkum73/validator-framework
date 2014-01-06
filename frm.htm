@@ -1,0 +1,251 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+	
+	.error{
+		border-color: red;
+		
+	}
+	.errormsg{color:red;
+		font-size: 14px;}
+</style>
+</head>
+<body>
+<form name='form'>
+	<div class="text-input">
+		<label for="username">Name: </label>
+		<input type="text" name="fullname" id="username">
+	</div>
+		Email: <input type="text" name="email"><br>
+		<select>
+			<option>select</option>
+			<option>b<option>
+		</select><br>
+		<select>
+			<option>select</option>
+			<option>d</option>
+		</select><br>
+		<div id="food" class="radio-group">
+			<h5>Food</h5>
+			<input type="radio" name="food" value="1" class="radio"/> : Italian<br />
+			<input type="radio" name="food" value="2" class="radio"/> : Greek<br />
+			<input type="radio" name="food" value="3" class="radio"/> : Chinese<br />
+		</div>
+		<div id="gender" class="radio-group">
+			<h5>Gender</h5>
+			<input type="radio" name="gender" class="radio"/> : Male<br />
+			<input type="radio" name="gender" class="radio"/> : Female<br />
+		</div>
+		<div id="vehicle" class="checkBox-group">
+			<h5>Vehicle</h5>
+			<input type="checkbox" class="checkBox" name="vehicle" value="Bike">I have a bike<br>
+			<input type="checkbox" class="checkBox" name="vehicle" value="Car">I have a car <br>
+			<input type="checkbox" class="checkBox" name="vehicle" value="Bike">I have a bike<br>
+		</div>
+		<div id="vehicle1" class="checkBox-group">
+			<h5>Vehicle1</h5>
+			<input type="checkbox" class="checkBox" name="vehicle1" value="Car">I have a car <br>
+			<input type="checkbox" class="checkBox" name="vehicle1" value="Car">I have a car <br>
+			<input type="checkbox" class="checkBox" name="vehicle1" value="Bike">I have a bike<br>
+		</div>
+		<input type="submit" value="submit">
+	</form>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script type="text/javascript">
+		var p=0;//a variable which returns true when 0 else false on submit
+		var isChecked;
+		var TEST= {};
+
+		TEST.validate = {
+			settings:{
+				form: null,
+				texts: null,
+				selects: null,
+				radios:null ,
+				checkboxes: null
+
+			},
+			initialisedValues:{
+				form: null,
+				texts: '',
+				selects: 'select',
+				radios:false ,
+				checkboxes:false
+
+			},
+			errmsg:{
+				texts:"please fill out the field",
+				radios:"please select any radios",
+				selects:"please select any option",
+				checkboxes:"please select the checkboxes"
+
+			},
+
+			
+			init: function(form){
+				var local = this.settings;
+				local.form = $(form);
+				local.texts = this.settings.form.find('input:text');
+				local.selects = this.settings.form.find('select');
+				local.radios = this.settings.form.find('input:radio');
+				local.checkboxes = this.settings.form.find('input:checkbox');
+				this.setEvents(local.texts,local.selects,local.radios,local.checkboxes,local.form);
+			},
+
+			setEvents: function(texts,selects,radios,checkboxes,form){
+				this.validateTextInputs(texts);
+				this.validateSelects(selects);
+				this.validateOnSubmit(texts,selects,radios,checkboxes,form);
+				},
+			validateTextInputs:function(texts){
+				var that=this;
+				$(texts).on('blur',function() {
+					var result=that.validateFormFields($(this).val(),'texts',this);
+					that.addCss(this,result);
+				});
+				},
+
+		// 	validateRadioInputsOnSubmit:function(type){
+		// 			var radioGroups = [];
+		// 			var radios = [];
+		// 			for(i=0;i<type.length;i++){
+		// 				radios.push($(type)[i].attr("name"));
+		// 			}
+
+		// 			radioGroups=$.unique(radios);//it sorts the array :(
+
+		// 			for(k=0;k<radioGroups.length;k++)
+		// 			 	{
+		// 			 		isChecked =  false;
+		// 			 		var temp = document.getElementsByName(radioGroups[k]);
+		// 					for(i=0;i<temp.length;i++)
+		// 						{
+		// 							if(temp[i].checked==true)
+		// 								{
+		// 									isChecked=true;	
+		// 									break;
+		// 								}
+		// 						}
+		// 					var radioContainer='#'+radioGroups[k]+' '+'h5';
+		// 					if(!isChecked)
+		// 						{
+		// 							$(radioContainer).addClass("error");
+		// 							p=p+1;	
+		// 						} else  $(radioContainer).removeclass("error");
+
+		// }
+		// 	validateCheckboxInputsOnSubmit:function(checkboxes){
+		// 		var checkboxGroups = [];
+		// 		var checkbox = [];
+		// 		for(i=0;i<$(type).length;i++){
+		// 			checkbox.push($(type)[i].attr("name"));
+		// 		}
+
+		// 		checkboxGroups=$.unique(checkbox);//it sorts the array :(
+
+		// 		for(k=0;k<checkboxGroups.length;k++)
+		// 		 	{
+		// 		 		isChecked =  false;
+		// 		 		var temp = document.getElementsByName(checkboxGroups[k]);
+		// 				for(i=0;i<temp.length;i++)
+		// 					{
+		// 						if(temp[i].checked==true)
+		// 							{
+		// 								isChecked=true;	
+		// 								break;
+		// 							}
+		// 					}
+		// 				var checkboxContainer='#'+checkboxGroups[k]+' '+'h5';
+		// 			if(!isChecked)
+		// 						{
+		// 							$(radioContainer).addClass("error");
+		// 							p=p+1;	
+		// 						} else  $(radioContainer).removeclass("error");
+
+		// 			}
+			
+		// 		},
+
+
+			validateSelects:function(selects){
+				var that=this;
+					$(selects).on('blur',function() {
+ 					var result=that.validateFormFields($(this).val(),'selects',this);
+ 						that.addCss(this,result);
+					});
+					},
+
+			validateFormFields: function(value,types,obj){
+				/*This checks the validity of texts inputs and selects*/
+				
+			
+				
+
+							if(value===this.initialisedValues[types]){
+								this.showErrorMessage(types,obj);//error
+								return true;
+							}	 else false;
+					
+
+
+
+			},
+
+			showErrorMessage: function(elem,obj){
+					console.log('manish');
+					console.log(obj);
+					$(obj).after('<span class="errormsg">'+this.errmsg[elem]+'</span>');
+				
+			},
+			addCss:function(obj,result){
+				if(result===true){
+						$(obj).addClass('error');
+					
+					}
+ 				else {
+ 					$(obj).removeClass('error');
+ 				//	$('.errormsg').remove();
+					}
+				},
+			validateOnSubmit:function(texts,selects,radios,checkboxes,form){
+				
+				var that=this;
+				$(form).submit(function(){
+				
+					that.validatingindividualFieldsOnSubmit(texts);
+					that.validatingindividualFieldsOnSubmit(selects);
+				//	validateCheckboxInputsOnSubmit(checkboxes);
+				//	validateRadioInputsOnSubmit(radios);
+					if (p!=0) {return false;}
+					});
+			},
+
+			validatingindividualFieldsOnSubmit:function(obj){
+				
+				var types=obj.attr('type')+'s';
+				for(i=0;i<obj.length;i++)
+					{
+						var value=obj.eq(i).val();//error
+						// this.obj=obj;
+						var result=this.validateFormFields(value,types,obj.eq(i));
+						this.addCss(obj.eq(i),result);
+						if(result) p=p+1;
+					}
+	
+				}
+				};
+			
+
+$(document).ready(
+			function(){
+				var form_name=document.getElementsByName('form');
+				TEST.validate.init(form_name);
+				
+			});
+	</script>
+</body>
+
+
+
+</html>

@@ -1,0 +1,68 @@
+<!DOCTYPE html>
+<html>
+<style>
+	.radio{background-color:red;}
+
+</style>
+<head><script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+</script></head>
+<body>
+
+<form>
+<label class="labelForCheckBox">vehicle</label><br>
+<input type="checkbox" class="checkBox" name="vehicle" value="Bike">I have a bike<br>
+<input type="checkbox" class="checkBox" name="vehicle" value="Car">I have a car <br>
+<input type="checkbox" class="checkBox" name="vehicle" value="Bike">I have a bike<br>
+<label class="labelForCheckBox">vehicle1</label><br>
+<input type="checkbox" class="checkBox" name="vehicle1" value="Car">I have a car <br>
+<input type="checkbox" class="checkBox" name="vehicle1" value="Car">I have a car <br>
+<input type="checkbox" class="checkBox" name="vehicle1" value="Bike">I have a bike<br>
+</form>
+
+
+<script type="text/javascript">
+
+var k=0;
+var checkboxGroups = [];
+var uncheckedCheckboxGroups = [];
+var checkboxes = [];
+var inputlements = document.querySelectorAll(".checkBox");
+var lengths=inputlements.length;
+var isChedked =  false;
+for(i=0;i<lengths;i++){
+
+	checkboxes[k]=inputlements[i].getAttribute("name");
+		k=k+1;
+	}
+	checkboxGroups=$.unique(checkboxes);//it sorts the array :(
+ 	for(k=0;k<checkboxGroups.length;k++){
+		for(i=0;i<document.getElementsByName(checkboxGroups[k]).length;i++){
+			if(document.getElementsByName(checkboxGroups[k])[i].checked==true){
+				isChedked=true;	
+				
+			}
+
+		}
+		
+		if(!isChedked){
+			//if($("label").text()==="Gender")
+			var labelForCheckBox=$("label").filter(".labelForCheckBox");
+			// console.log(RadioLabels.eq(1).text());
+			// console.log(radioGroups[k]);
+
+			for(i=0;i<checkboxGroups.length;i++){
+			if(labelForCheckBox.eq(i).text()===checkboxGroups[k]){
+				labelForCheckBox.eq(i).css('color','red');
+			}
+		}
+			p=p+1;	
+		}
+	}
+	if (p!=0) {return false;}
+});
+
+});
+
+</script>
+</body>
+</html>

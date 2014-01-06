@@ -1,0 +1,70 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js">
+</script>
+     <style type="text/css">
+   
+    #main{
+        height:980px;
+        width:1280px;
+        margin:auto;
+         }
+    #pop{
+        font-weight: bold;
+        height: 150px;
+        width: 400px;
+        background: #708090;
+       
+        border: red solid 7px;
+        border-radius: 7px;
+        
+        position: fixed;
+        top: 200px;
+        left: 400px;
+        z-index:4000;
+        opacity: 0;
+        transition:opacity 2s;
+    }
+    button{
+        size:50;
+        background:green;
+        border-radius: 5px;
+        border:2px solid gray;
+    }
+  
+    </style>
+    <script type="text/javascript">
+   
+$(document).ready(function(){
+  $("#btn").click(function(){
+   // alert("entered");
+   $("#pop").css("opacity",.7);
+  });
+   $("#save").click(function(){
+     $("#pop").css("opacity",0);
+});
+});
+
+    
+    </script>
+</head>
+<body>
+    <div>
+        <div id="main">
+            <img src="img/b.jpg"  width="1280px">
+            <button id="btn">Login</button>
+                    
+         </div> 
+         <div id="pop">
+            <table>
+                 <tr><td>Name:</td><td><input type="text"></td></tr>
+                 <tr><td>Age:</td><td><input type="text"></td></tr>
+                <tr><td>  College:</td><td><input type="text"></td></tr>
+                <tr><td><button id="save">Save</button></td></tr>
+             </table>
+         </div>
+        
+    </div>
+</body>
+</html>

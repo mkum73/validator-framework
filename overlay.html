@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html>
+<head>
+<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+<style>
+*{outline:1px solid gray;}
+
+#images{
+width:860px;
+margin:auto;
+
+}
+#images img{
+width: 240px;
+
+}
+#pop{
+		height: 400px;
+        width: 500px;
+        position: fixed;
+        top: 100px;
+        left: 400px;
+        z-index:40000;
+      
+        transition:opacity 2s;
+        display: block;
+    }
+    #close{
+background: green;
+float: right;
+
+    }
+</style>
+<script>
+$(document).ready(function(){
+  $("img").click(function(){
+
+    var s=$(this).attr('src');
+    $("#pop").css({
+   		'background-image':'url('+s+')',
+   		'display': 'block',
+   		   	});
+
+       $("#close").click(function(){
+    		$("#pop").css("display",'none');
+		});
+
+         $("body").click(function(event){
+         	console.log(event.target.nodeName);
+         	if(event.target.nodeName!="IMG" && $(event.target).attr("id") != 'pop' ){
+    	 		$("#pop").css("display",'none');}
+		});
+  });
+});
+</script>
+</head>
+<body>
+<div id="images">
+	<img src="img/a.jpg">
+	<img src="img/b.jpg">
+	<img src="img/c.jpg">
+	
+</div>
+<div id="pop"><button id="close">X</button></div>
+</body>
+</html>

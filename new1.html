@@ -1,0 +1,263 @@
+<!DOCTYPE html>
+<html>
+<head>
+<style>
+	
+	.error{
+		border-color: red;
+		
+	}
+	.errormsg{color:red;
+		font-size: 14px;}
+</style>
+</head>
+<body>
+<form name='form'>
+		Name: <input type="text" name="fullname"><br>
+		Email: <input type="text" name="email"><br>
+		<select>
+			<option>select</option>
+			<option>b<option>
+		</select><br>
+		<select>
+			<option>select</option>
+			<option>d</option>
+		</select><br>
+		<div id="food" class="radio-group">
+			<h5>Food</h5>
+			<input type="radio" name="food" value="1" class="radio"/> : Italian<br />
+			<input type="radio" name="food" value="2" class="radio"/> : Greek<br />
+			<input type="radio" name="food" value="3" class="radio"/> : Chinese<br />
+		</div>
+		<div id="gender" class="radio-group">
+			<h5>Gender</h5>
+			<input type="radio" name="gender" class="radio"/> : Male<br />
+			<input type="radio" name="gender" class="radio"/> : Female<br />
+		</div>
+		<div id="vehicle" class="checkBox-group">
+			<h5>Vehicle</h5>
+			<input type="checkbox" class="checkBox" name="vehicle" value="Bike">I have a bike<br>
+			<input type="checkbox" class="checkBox" name="vehicle" value="Car">I have a car <br>
+			<input type="checkbox" class="checkBox" name="vehicle" value="Bike">I have a bike<br>
+		</div>
+		<div id="vehicle1" class="checkBox-group">
+			<h5>Vehicle1</h5>
+			<input type="checkbox" class="checkBox" name="vehicle1" value="Car">I have a car <br>
+			<input type="checkbox" class="checkBox" name="vehicle1" value="Car">I have a car <br>
+			<input type="checkbox" class="checkBox" name="vehicle1" value="Bike">I have a bike<br>
+		</div>
+		<input type="submit" value="submit">
+	</form>
+	<script src="http://ajax.googleapis.com/ajax/libs/jquery/1.10.2/jquery.min.js"></script>
+	<script type="text/javascript">
+		
+		var TEST= {};
+
+		TEST.validate = {
+			settings:{
+				form: null,
+				texts: null,
+				selects: null,
+				radios:null ,
+				checkboxes: null
+
+			},
+			initialisedValues:{
+				form: null,
+				texts: '',
+				selects: 'select',
+				radios:null ,
+				checkboxes: null
+
+			},
+			errmsg:{
+				texts:"please fill out the field",
+				radios:"please select any radios",
+				selects:"please select any option",
+				checkboxes:"please select the checkboxes"
+
+			},
+
+			
+			init: function(form){
+				var local = this.settings;
+				this.settings.form = $(form);
+				local.texts = this.settings.form.find('input:text');
+				local.selects = this.settings.form.find('select');
+				local.radios = this.settings.form.find('input:radio');
+				local.checkboxes = this.settings.form.find('input:checkbox');
+				this.setEvents(local.texts,local.selects,local.radios,local.checkboxes);
+			},
+
+			setEvents: function(texts,selects,radios,checkboxes){
+				this.validateTextInputs(texts);
+				this.validateRadioInputs(radios);
+				this.validateCheckboxInputs(checkboxes);
+				this.validateSelects(selects);
+				},
+			validateTextInputs:function(texts){
+				var that=this;
+				$(texts).on('blur',function() {
+					var result=that.validateFormFields($(this).val(),'texts',this);//error
+					that.addCss(this,result);
+				});
+				},
+
+			validateRadioInputs:function(radios){
+				var that=this;
+				$(radios).on('blur',function() {
+ 					var result=that.validateFormFields($(this).val(),'radios');
+ 					this.addCss(this,result);
+				});
+				},
+			validateCheckboxInputs:function(checkboxes){
+				var that=this;
+				$(checkboxes).on('blur',function() {
+ 					var result=that.validateFormFields($(this).val(),'checkboxes');
+ 					that.addCss(this,result);
+ 				});
+				},
+
+
+			validateSelects:function(selects){
+				var that=this;
+					$(selects).on('blur',function() {
+ 					var result=that.validateFormFields($(this).val(),'selects',this);
+ 						that.addCss(this,result);
+					});
+					},
+
+			validateFormFields: function(value,types,obj){
+							if(value===this.initialisedValues[types]){
+							this.showErrorMessage(types,obj);//error
+							return true;
+				} else false;
+			},
+
+			showErrorMessage: function(elem,obj){
+				console.log(this.errmsg[elem]);
+				
+				$(obj).after('<span class="errormsg">'+this.errmsg[elem]+'</span>');
+			},
+			addCss:function(obj,result){
+				if(result===true){
+						$(obj).addClass('error');
+					
+					}
+ 				else {
+ 					$(obj).removeClass('error');
+ 					$('.errormsg').hide();
+			}
+		}
+				
+			
+		};
+			
+
+$(document).ready(
+			function(){
+				var form_name=document.getElementsByName('form');
+				TEST.validate.init(form_name);
+				validateOnSubmit(form_name);
+			});
+//=============================================================================
+function validateOnSubmit(form){
+	$(document).ready(function(){
+
+	  $(this.form).submit(function(){
+	  	var p=0;
+
+	   	for(i=0;i<$("input").length;i++){
+	 		if($("input").eq(i).val()===""){
+				$("input").eq(i).addClass("error");
+				p=p+1;	
+				}else $("input").eq(i).removeClass("error");
+				}
+		for(i=0;i<$("select").length;i++){
+			if($("select").eq(i).val()==="select"){
+				$("select").eq(i).addClass("error");
+					p=p+1;
+				}else $("select").eq(i).removeClass("error");
+				}
+				
+	//////////////////////////////////////
+
+	var radioGroups = [];
+	var uncheckedRadioGroups = [];
+	var radios = [];
+	var inputlements = document.querySelectorAll(".radio");
+	var isChecked;
+	for(i=0;i<inputlements.length;i++){
+		radios.push(inputlements[i].getAttribute("name"));
+	}
+
+	radioGroups=$.unique(radios);//it sorts the array :(
+
+	for(k=0;k<radioGroups.length;k++)
+	 	{
+	 		isChecked =  false;
+	 		var temp = document.getElementsByName(radioGroups[k]);
+			for(i=0;i<temp.length;i++)
+				{
+					if(temp[i].checked==true)
+						{
+							isChecked=true;	
+							break;
+						}
+				}
+			var radioContainer='#'+radioGroups[k]+' '+'h5';
+			if(!isChecked)
+				{
+					$(radioContainer).css("color","red");
+					p=p+1;	
+				} else  $(radioContainer).css("color","black");
+
+		}
+	//////////////////////////////////
+	var checkboxGroups = [];
+	var uncheckedCheckboxGroups = [];
+	var checkboxes = [];
+	var inputlements = document.querySelectorAll(".checkBox");
+	var isChecked;
+	for(i=0;i<inputlements.length;i++){
+		checkboxes.push(inputlements[i].getAttribute("name"));
+	}
+
+	checkboxGroups=$.unique(checkboxes);//it sorts the array :(
+
+	for(k=0;k<checkboxGroups.length;k++)
+	 	{
+	 		isChecked =  false;
+	 		var temp = document.getElementsByName(checkboxGroups[k]);
+			for(i=0;i<temp.length;i++)
+				{
+					if(temp[i].checked==true)
+						{
+							isChecked=true;	
+							break;
+						}
+				}
+			var checkboxContainer='#'+checkboxGroups[k]+' '+'h5';
+			if(!isChecked)
+				{
+					
+					$(checkboxContainer).css("color","red");
+					p=p+1;	
+				} else $(checkboxContainer).css("color","black");
+
+		}
+	//////////////////////////////////////////////
+		if (p!=0) {return false;}
+	});
+
+	});
+}
+
+
+
+	</script>
+</body>
+
+
+
+</html>

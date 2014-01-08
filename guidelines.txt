@@ -1,0 +1,7 @@
+provide form name.
+use (label for) for field using ID....
+keep each field in a div-wrapper giving it an Id...
+keep same type of radios in one wrapper...similarly for checkbox
+use <p>for headers for radio & checkboxes 
+give class name to headers..I have used form-header for header labels and header <p>
+
